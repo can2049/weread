@@ -112,5 +112,4 @@ func (this *MainController) Changepwd() {
 		}
 	}
 	this.Rsp(false, "密码有误")
-
 }

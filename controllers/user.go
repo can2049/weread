@@ -2,6 +2,7 @@ package controllers
 
 import (
 	// m "github.com/beego/admin/src/models"
+	"github.com/astaxie/beego"
 	"weread/models"
 )
 
@@ -9,7 +10,11 @@ type UserController struct {
 	CommonController
 }
 
-func (this *UserController) Index() {
+func (this *UserController) Login() {
+	userinfo := this.GetSession("userinfo")
+	if userinfo == nil {
+		this.Ctx.Redirect(302, beego.AppConfig.String("rbac_auth_gateway"))
+	}
 }
 
 /*

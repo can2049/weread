@@ -20,15 +20,20 @@ type User struct {
 	Password      string    `orm:"size(32)" form:"Password" valid:"Required;MaxSize(20);MinSize(6)"`
 	Repassword    string    `orm:"-" form:"Repassword" valid:"Required"`
 	Email         string    `orm:"null;size(32)" form:"Email" valid:"Email"`
-	Status        uint8     `orm:"default(2)" form:"Status" valid:"Range(1,2)"`
+	Status        int8      `orm:"default(2)" form:"Status" valid:"Range(1,2)"`
 	Lastlogintime time.Time `orm:"null;type(datetime)" form:"-"`
-	Createtime    time.Time `orm:"type(datetime);auto_now_add" `
-	Role          []*Role   `orm:"rel(m2m)"`
+	// auto_now 每次 model 保存时都会对时间自动更新
+	// auto_now_add 第一次保存时才设置时间
+	Created   time.Time `orm:"type(datetime);auto_now_add" `
+	LastLogin time.Time //`orm:"type(datetime);auto_now"`
+	//role, nomal user 0, admin 1
+	LastIp string
+	Role   int8 `orm:""`
 }
 
 var USER = []User{
 	{
-		Id:       0,
+		Id:       1,
 		Username: beego.AppConfig.String("rbac_admin_user"),
 		Password: utils.Pwdhash(beego.AppConfig.String("default_admin_passwd")),
 		EmployId: "NULL",
